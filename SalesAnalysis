@@ -1,0 +1,87 @@
+---Inspecting data
+SELECT * FROM sales_data_sample
+
+---Checking unique values
+select distinct status from sales_data_sample 
+select distinct year_id from sales_data_sample 
+select distinct PRODUCTLINE from sales_data_sample  
+select distinct COUNTRY from sales_data_sample  
+select distinct DEALSIZE from sales_data_sample  
+select distinct TERRITORY from sales_data_sample  
+
+
+select distinct MONTH_ID from sales_data_sample 
+where YEAR_ID = 2005
+
+
+---Analysis
+---Group sales by productline
+SELECT PRODUCTLINE, sum (SALES) Revenue
+FROM sales_data_sample
+GROUP BY PRODUCTLINE
+ORDER BY 2 DESC
+
+---See different income for each year
+SELECT YEAR_ID, sum (SALES) Revenue
+FROM sales_data_sample
+GROUP BY YEAR_ID
+ORDER BY 2 DESC
+
+---See income for the 3 different dealsizes
+SELECT DEALSIZE, sum (SALES) Revenue
+FROM sales_data_sample
+GROUP BY DEALSIZE
+ORDER BY 2 DESC
+
+---Best month for sales in a specific year? How much was earned that month? 
+SELECT MONTH_ID, sum (SALES) Revenue, count (ORDERNUMBER) Frequency
+FROM sales_data_sample
+WHERE YEAR_ID = 2004 --- Change year to see other year's results
+GROUP BY MONTH_ID
+ORDER BY 2 DESC
+
+---November is the best month for sales, what are the products they sell in that month?
+SELECT MONTH_ID, PRODUCTLINE, sum (SALES) Revenue, count (ORDERNUMBER) Frequency
+FROM sales_data_sample
+WHERE YEAR_ID = 2004 AND MONTH_ID = 11
+GROUP BY PRODUCTLINE, MONTH_ID
+ORDER BY 3 DESC
+
+---What city has the highest number of sales in a specific country
+SELECT CITY, SUM (SALES) Revenue FROM sales_data_sample
+WHERE COUNTRY = 'UK' --Change country to see the rest
+GROUP BY CITY
+ORDER BY 2 DESC
+
+---Which city has the highest number of sales?
+SELECT  CITY, SUM (SALES) Revenue FROM sales_data_sample
+GROUP BY CITY
+ORDER BY 2 DESC
+
+---Which country has the highest number of sales?
+SELECT  COUNTRY, SUM (SALES) Revenue FROM sales_data_sample
+GROUP BY  COUNTRY
+ORDER BY 2 DESC
+
+---What is the best product in the United States?
+select country, YEAR_ID, PRODUCTLINE, sum(sales) Revenue
+from sales_data_sample
+where country = 'USA'
+group by  country, YEAR_ID, PRODUCTLINE
+order by 4 desc
+
+---How many on hold orders are there?
+SELECT ORDERNUMBER STATUS FROM sales_data_sample
+WHERE STATUS = 'On Hold'
+GROUP BY ORDERNUMBER, STATUS
+
+---Calculating the average revenue for each product
+SELECT PRODUCTLINE, avg(sales) AvgRevenue FROM  sales_data_sample
+GROUP BY PRODUCTLINE
+ORDER BY 2 DESC
+
+---Grouping products that made more than 1000000
+SELECT PRODUCTLINE, sum(sales) Revenue FROM  sales_data_sample
+GROUP BY PRODUCTLINE
+HAVING sum(sales) > 1000000
+ORDER BY PRODUCTLINE
