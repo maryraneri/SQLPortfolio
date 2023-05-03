@@ -1,0 +1,55 @@
+/* For this project I am using the Climate Risk and Economic Loss dataset dowloaded from Kaggle
+credit: data.world's Admin.
+This dataset contains critical information about the Global Climate Risk Index
+and associated economic data for countries around the world.*/
+
+---Inspecting Data
+SELECT * FROM [dbo].[climate-risk-index-1]
+
+---Checking unique values
+select distinct country from [dbo].[climate-risk-index-1]
+select distinct cri_rank from [dbo].[climate-risk-index-1]
+select distinct cri_score from [dbo].[climate-risk-index-1]
+select distinct fatalities_per_100k_total from [dbo].[climate-risk-index-1]
+select distinct fatalities_total from [dbo].[climate-risk-index-1]
+select distinct losses_per_gdp_total from [dbo].[climate-risk-index-1]
+select distinct losses_usdm_ppp_total from [dbo].[climate-risk-index-1]
+
+---Analysis
+
+Select country, cri_rank, fatalities_total, losses_per_gdp_total
+from [dbo].[climate-risk-index-1]
+order by 2 
+
+---See Total Fatalities for each Country
+Select country, fatalities_total
+from [dbo].[climate-risk-index-1]
+--where country = 'Italy' --- change country to see the rest
+order by 2 desc
+
+---which areas are most vulnerable to climate related disasters
+Select country, cri_score from [dbo].[climate-risk-index-1]
+Order by 2 asc
+
+---See Total GDP losses for each country
+Select country, losses_per_gdp_total
+from [dbo].[climate-risk-index-1]
+--where country = 'Saudi Arabia'
+order by 2 desc
+
+--- Total Fatalities per Total GDP losses
+Select country, fatalities_total, losses_per_gdp_total, (fatalities_total/losses_per_gdp_total)*0.0001 as GDPLossesImpact
+from [dbo].[climate-risk-index-1]
+--where country = 'Italy' --- change country to see the rest
+order by 2 desc
+
+---Countries with the highest GDP losses compared to Fatalities
+Select country, fatalities_total, (fatalities_total/losses_per_gdp_total)*0.0001 as GDPLossesImpact
+from [dbo].[climate-risk-index-1]
+--where country = 'Italy' --- change country to see the rest
+order by 3 desc
+
+Select country, fatalities_total, losses_usdm_ppp_total, (losses_usdm_ppp_total/losses_per_gdp_total)*0.0001 as PPPImpact
+from [dbo].[climate-risk-index-1]
+--where country = 'Italy' --- change country to see the rest
+order by 3, 4 asc
